@@ -13,7 +13,7 @@ from typing import (
     overload,
 )
 
-from emitter import Event, Listenable, emittable, listenable, mapped
+from emitter import Emittable, Event, Listenable, emittable, listenable, mapped
 from option_and_result import E, O, Result
 from store import Readable, readable
 
@@ -87,7 +87,7 @@ def events(emitter: Listenable[Event]) -> AsyncGenerator[Event, None]:
     I did something for b'l'
     """
 
-    queue = Queue()
+    queue: Queue[Event] = Queue()
 
     unlisten = emitter.listen(queue.put_nowait)
 
@@ -112,9 +112,7 @@ def latest(emitter: Listenable[Event]) -> Readable[Event | None]:
 
 
 # I like the way calls to this function behave so I am deliberately ignoring the error
-def latest(  # type: ignore
-    emitter: Listenable[Event], initial_value: Event = None
-) -> Readable[Event | None]:
+def latest(emitter: Listenable[Event], initial_value: Event = None) -> Readable[Event | None]:  # type: ignore
     """
     Returns a store whose value is the most recent event emitted by the `emitter`,
     or `initial_value`.
@@ -359,7 +357,7 @@ def categorize(
         return start
 
     for i, category in enumerate(categories):
-        subemitter = emittable(start_subemitter(i))
+        subemitter: Emittable[Event] = emittable(start_subemitter(i))
 
         emits[category] = subemitter.emit
         listenables[category] = Listenable(listen=subemitter.listen)
