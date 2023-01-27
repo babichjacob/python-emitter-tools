@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "babichjacob-emitter-tools"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tools for working with event emitters"
 license = "MIT"
 authors = ["J or Jacob Babich <jacobbabichpublic+git@gmail.com>"]
